@@ -1,2 +1,0 @@
-# thm
-tryhackme machines
