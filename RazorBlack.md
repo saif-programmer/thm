@@ -25,6 +25,7 @@ What is the complete top secret?
 - `xyan1d3`:`cyanide9amine5628`
 - `twilliams`:`roastpotatoes`
 - `lvetrova`: hash`f220d3988deb3f516c73f40ee16c431d`
+- `Administrator`: hash `9689931bed40ca5a2ce1218210177f0c`
 
 ### steps: 
 ```bash
